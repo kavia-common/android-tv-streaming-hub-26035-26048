@@ -125,6 +125,7 @@ private fun TVScaffold(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun NavButton(text: String, onClick: () -> Unit) {
     // TV Material3 button automatically supports focus states with glow and scale

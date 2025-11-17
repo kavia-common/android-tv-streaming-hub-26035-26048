@@ -8,21 +8,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import coil.compose.AsyncImage
 import com.example.android_tv_frontend.data.ContentItem
 import com.example.android_tv_frontend.data.MockContentRepository
 import com.example.android_tv_frontend.ui.home.components.CategoryRow
-import kotlinx.coroutines.launch
 
 /**
  * PUBLIC_INTERFACE
  * VideoDetailScreen
  * Shows poster/backdrop, synopsis, and actions; allows Play/Resume and opens related items.
  */
-@OptIn(ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalTvMaterial3Api::class) // tv-material3 components are experimental
 @Composable
 fun VideoDetailScreen(
     id: String,
