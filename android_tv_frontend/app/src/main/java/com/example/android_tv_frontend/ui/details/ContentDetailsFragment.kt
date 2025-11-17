@@ -5,12 +5,26 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.leanback.app.DetailsSupportFragment
-import androidx.leanback.widget.*
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.ClassPresenterSelector
+import androidx.leanback.widget.DetailsOverviewRow
+import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
+import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.ObjectAdapter
+import androidx.leanback.widget.OnActionClickedListener
+import androidx.leanback.widget.Presenter
+import androidx.leanback.widget.Row
+import androidx.leanback.widget.RowPresenter
+import androidx.leanback.widget.SparseArrayObjectAdapter
 import com.bumptech.glide.Glide
 import com.example.android_tv_frontend.R
+import com.example.android_tv_frontend.cast.CastManager
 import com.example.android_tv_frontend.data.model.ContentItem
 import com.example.android_tv_frontend.ui.playback.PlaybackActivity
-import com.example.android_tv_frontend.cast.CastManager
 
 /**
  * PUBLIC_INTERFACE
@@ -51,6 +65,7 @@ class ContentDetailsFragment : DetailsSupportFragment() {
         }
         adapter = adapterRows
 
+        // Actions
         val playAction = Action(1, getString(R.string.action_play))
         val watchlistAction = Action(2, getString(R.string.action_watchlist))
         val castAction = Action(3, getString(R.string.action_cast))
@@ -62,12 +77,23 @@ class ContentDetailsFragment : DetailsSupportFragment() {
         }
 
         adapterRows.add(detailsOverviewRow)
-        wireActions()
 
-        // Load artwork
+        // Wire action clicks at the presenter-level (correct Leanback API)
+        (detailsPresenter).onActionClickedListener =
+            OnActionClickedListener { action ->
+                when (action.id.toInt()) {
+                    1 -> startActivity(PlaybackActivity.createIntent(requireContext(), item))
+                    2 -> {
+                        action.label1 = getString(R.string.action_watchlisted)
+                        (adapter as ArrayObjectAdapter).notifyArrayItemRangeChanged(0, 1)
+                    }
+                    3 -> CastManager.get(requireContext()).showCastDialog(requireActivity(), item)
+                }
+            }
+
+        // Load artwork (handled in onStart via Glide)
         view?.post {
-            val iv = (adapterRows[0] as DetailsOverviewRow).imageDrawable
-            // Using main image view is internal; just load with backdrop
+            // no-op placeholder to align with lifecycle; image loading in onStart
         }
     }
 
@@ -85,19 +111,6 @@ class ContentDetailsFragment : DetailsSupportFragment() {
                 }
                 override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {}
             })
-    }
-
-    private fun wireActions() {
-        detailsOverviewRow.setOnActionClickedListener { action ->
-            when (action.id.toInt()) {
-                1 -> startActivity(PlaybackActivity.createIntent(requireContext(), item))
-                2 -> {
-                    action.label1 = getString(R.string.action_watchlisted)
-                    (adapter as ArrayObjectAdapter).notifyArrayItemRangeChanged(0, 1)
-                }
-                3 -> CastManager.get(requireContext()).showCastDialog(requireActivity(), item)
-            }
-        }
     }
 }
 
