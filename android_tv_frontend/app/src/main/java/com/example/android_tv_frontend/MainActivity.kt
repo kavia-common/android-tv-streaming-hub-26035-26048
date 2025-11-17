@@ -1,43 +1,30 @@
 package com.example.android_tv_frontend
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import android.view.KeyEvent
-import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
+import com.example.android_tv_frontend.navigation.TVNavGraph
+import com.example.android_tv_frontend.ui.theme.OceanTVTheme
 
 /**
- * Main Activity for Android TV
- * Extends FragmentActivity for Leanback compatibility
+ * PUBLIC_INTERFACE
+ * MainActivity
+ * Entry point for the Android TV app using Jetpack Compose for TV.
+ * Sets up the Ocean Professional theme and hosts the navigation graph.
  */
-class MainActivity : FragmentActivity() {
-
-    private lateinit var titleText: TextView
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        
-        titleText = findViewById(R.id.title_text)
-        titleText.text = "android_tv_frontend"
-        
-        // TODO: Initialize your rating screen components here
-        // setupRatingOverlay()
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        // Handle TV remote control inputs
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER,
-            KeyEvent.KEYCODE_ENTER -> {
-                // Handle SELECT/OK button
-                true
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setContent {
+            OceanTVTheme {
+                TVNavGraph()
             }
-            KeyEvent.KEYCODE_BACK -> {
-                // Handle BACK button
-                finish()
-                true
-            }
-            else -> super.onKeyDown(keyCode, event)
         }
     }
 }

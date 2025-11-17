@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme for Android TV -->
-    <style name="AppTheme" parent="Theme.Leanback">
-        <!-- Customize your theme here -->
-        <item name="android:windowBackground">@color/tv_background</item>
-        <item name="android:colorPrimary">@color/tv_accent</item>
+    <!-- Placeholder theme name referenced by Manifest; actual theming handled in Compose.
+         Use a widely available parent to avoid resource linking failures in CI. -->
+    <style name="Theme.OceanTV" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/ocean_background</item>
     </style>
 </resources>
