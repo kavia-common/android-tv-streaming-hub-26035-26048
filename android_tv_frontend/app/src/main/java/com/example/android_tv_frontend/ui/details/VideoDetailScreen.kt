@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
  * VideoDetailScreen
  * Shows poster/backdrop, synopsis, and actions; allows Play/Resume and opens related items.
  */
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun VideoDetailScreen(
     id: String,

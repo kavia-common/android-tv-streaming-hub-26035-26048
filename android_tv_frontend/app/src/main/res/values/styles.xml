@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Placeholder theme referenced by Manifest; actual theming handled in Compose.
-         Select a base theme guaranteed to exist in the platform without extra libs. -->
-    <style name="Theme.OceanTV" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+    <!-- PUBLIC_INTERFACE -->
+    <!-- Theme.OceanTV
+         Minimal app theme used by the AndroidManifest. Actual UI is Compose Material3.
+         Use a Material Components parent that does not depend on old support libs,
+         and provides a NoActionBar window for legacy views. -->
+    <style name="Theme.OceanTV" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Pre-compose window background -->
         <item name="android:windowBackground">@color/ocean_background</item>
     </style>
 </resources>

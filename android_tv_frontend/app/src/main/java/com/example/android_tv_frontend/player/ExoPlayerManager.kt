@@ -28,17 +28,17 @@ class ExoPlayerManager(private val context: Context) {
     }
 
     fun prepare(url: String, title: String? = null, isLive: Boolean = false, resumePositionMs: Long = 0L) {
-        val mediaItem = MediaItem.Builder()
+        val builder = MediaItem.Builder()
             .setUri(url)
             .setMediaMetadata(
                 MediaMetadata.Builder()
                     .setTitle(title)
                     .build()
             )
-            .setLiveConfiguration(
-                if (isLive) MediaItem.LiveConfiguration.Builder().build() else null
-            )
-            .build()
+        if (isLive) {
+            builder.setLiveConfiguration(MediaItem.LiveConfiguration.Builder().build())
+        }
+        val mediaItem = builder.build()
         player.setMediaItem(mediaItem)
         player.prepare()
         if (!isLive && resumePositionMs > 0) {

@@ -12,7 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.android_tv_frontend.data.ContentItem
@@ -33,7 +33,8 @@ fun FeaturedCarousel(items: List<ContentItem>, onClick: (ContentItem) -> Unit) {
                     .width(420.dp)
                     .height(240.dp)
                     .scale(scale)
-                    .focusable(onFocusChanged = { focused = it.isFocused }),
+                    .onFocusChanged { state -> focused = state.isFocused }
+                    .focusable(),
                 onClick = { onClick(item) },
                 shape = RoundedCornerShape(16.dp),
                 border = if (focused) BorderStroke(2.dp, MaterialTheme.colorScheme.secondary) else null,
@@ -45,9 +46,11 @@ fun FeaturedCarousel(items: List<ContentItem>, onClick: (ContentItem) -> Unit) {
                         contentDescription = item.title,
                         modifier = Modifier.fillMaxSize()
                     )
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(64.dp)
+                    )
                     BasicText(
                         text = item.title,
                         modifier = Modifier.padding(12.dp),

@@ -27,6 +27,7 @@ import com.example.android_tv_frontend.ui.live.LiveTvGuideScreen
 import com.example.android_tv_frontend.ui.player.PlayerScreen
 import com.example.android_tv_frontend.ui.search.SearchScreen
 import com.example.android_tv_frontend.ui.settings.SettingsScreen
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 
 /**
  * PUBLIC_INTERFACE

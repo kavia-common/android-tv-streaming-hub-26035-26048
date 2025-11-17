@@ -22,7 +22,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        // Align with Kotlin 1.9.23 (see Compose-Kotlin compatibility map)
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
 
     packaging {
@@ -70,7 +71,10 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    // Compose Material3 for UI
     implementation("androidx.compose.material3:material3:1.2.1")
+    // XML theme parent (Theme.MaterialComponents.DayNight.NoActionBar)
+    implementation("com.google.android.material:material:1.12.0")
 
     // Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
