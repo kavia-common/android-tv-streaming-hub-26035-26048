@@ -1,0 +1,4 @@
+{
+    "command": "./gradlew dependencies",
+    "working_directory": "/home/kavia/workspace/code-generation/android-tv-streaming-hub-26035-26048/android_tv_frontend"
+}
