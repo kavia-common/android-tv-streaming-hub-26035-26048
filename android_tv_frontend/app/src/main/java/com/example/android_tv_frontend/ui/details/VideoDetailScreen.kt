@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
+
 import coil.compose.AsyncImage
 import com.example.android_tv_frontend.data.ContentItem
 import com.example.android_tv_frontend.data.MockContentRepository
@@ -27,7 +27,7 @@ import com.example.android_tv_frontend.ui.home.components.CategoryRow
  * VideoDetailScreen
  * Shows poster/backdrop, synopsis, and actions; allows Play/Resume and opens related items.
  */
-@OptIn(ExperimentalTvMaterial3Api::class) // tv-material3 components are experimental
+@OptIn(androidx.tv.material3.ExperimentalTvMaterial3Api::class) // tv-material3 components are experimental
 @Composable
 fun VideoDetailScreen(
     id: String,

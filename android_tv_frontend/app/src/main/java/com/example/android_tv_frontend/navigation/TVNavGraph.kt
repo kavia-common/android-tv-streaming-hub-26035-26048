@@ -27,7 +27,6 @@ import com.example.android_tv_frontend.ui.live.LiveTvGuideScreen
 import com.example.android_tv_frontend.ui.player.PlayerScreen
 import com.example.android_tv_frontend.ui.search.SearchScreen
 import com.example.android_tv_frontend.ui.settings.SettingsScreen
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 
 /**
  * PUBLIC_INTERFACE
@@ -125,7 +124,7 @@ private fun TVScaffold(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
+@OptIn(androidx.tv.material3.ExperimentalTvMaterial3Api::class)
 @Composable
 private fun NavButton(text: String, onClick: () -> Unit) {
     // TV Material3 button automatically supports focus states with glow and scale

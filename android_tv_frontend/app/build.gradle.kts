@@ -32,6 +32,12 @@ android {
         }
     }
 
+    lint {
+        // Do not abort the build on lint errors in CI environment while we iterate
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

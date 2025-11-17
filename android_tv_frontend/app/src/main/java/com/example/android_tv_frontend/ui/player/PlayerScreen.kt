@@ -1,3 +1,5 @@
+@file:OptIn(androidx.media3.common.util.UnstableApi::class)
+
 package com.example.android_tv_frontend.ui.player
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -12,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.media3.common.util.ExperimentalApi
+
 import androidx.media3.ui.PlayerView
 import com.example.android_tv_frontend.data.MockContentRepository
 import com.example.android_tv_frontend.player.ExoPlayerManager
@@ -22,7 +24,6 @@ import com.example.android_tv_frontend.player.ExoPlayerManager
  * PlayerScreen
  * Integrates Media3 ExoPlayer for playback of VOD/live streams. Saves resume positions.
  */
-@OptIn(ExperimentalApi::class)
 @Composable
 fun PlayerScreen(
     id: String,
