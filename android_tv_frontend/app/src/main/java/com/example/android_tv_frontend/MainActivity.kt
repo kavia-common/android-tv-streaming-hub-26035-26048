@@ -1,7 +1,7 @@
 package com.example.android_tv_frontend
 
-import android.graphics.Color
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import com.example.android_tv_frontend.ui.home.HomeBrowseFragment
@@ -19,7 +19,7 @@ class MainActivity : FragmentActivity() {
         // Host fragment container programmatically to keep it lean
         val container = androidx.fragment.app.FragmentContainerView(this).apply {
             id = R.id.main_container
-            setBackgroundColor(Color.parseColor("#f9fafb"))
+            setBackgroundColor(ContextCompat.getColor(context, R.color.ocean_background))
         }
         setContentView(container)
 

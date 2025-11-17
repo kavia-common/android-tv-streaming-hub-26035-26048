@@ -1,10 +1,16 @@
 package com.example.android_tv_frontend.ui.home
 
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
+import android.view.ViewOutlineProvider
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
@@ -12,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.android_tv_frontend.R
 import com.example.android_tv_frontend.data.Repository
-import com.example.android_tv_frontend.data.model.Category
 import com.example.android_tv_frontend.data.model.ContentItem
 import com.example.android_tv_frontend.ui.details.DetailsActivity
 import com.example.android_tv_frontend.ui.live.LiveTvActivity
@@ -32,16 +37,19 @@ class HomeBrowseFragment : BrowseSupportFragment(),
     }
 
     private val viewModel: HomeViewModel by viewModels()
-    private val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private lateinit var rowsAdapter: ArrayObjectAdapter
     private lateinit var cardPresenter: CardPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = getString(R.string.app_name)
+        title = ""
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         brandColor = Color.parseColor("#2563EB")
         searchAffordanceColor = Color.WHITE
+
+        // Background: subtle gradient to darker top matching Figma
+        view?.setBackgroundColor(Color.parseColor("#121212"))
 
         setOnSearchClickedListener {
             startActivity(SearchActivity.createIntent(requireContext()))
@@ -50,6 +58,22 @@ class HomeBrowseFragment : BrowseSupportFragment(),
         onItemViewClickedListener = this
         onItemViewSelectedListener = this
 
+        val listRowPresenter = ListRowPresenter().apply {
+            shadowEnabled = false
+            selectEffectEnabled = true
+
+            // Header styling: use a TextView-based header with our style
+            headerPresenter = object : RowHeaderPresenter(R.style.HomeRowHeader) {
+                init {
+                    setNullItemVisibilityGone(true)
+                }
+            }
+
+            // Note: ListRowPresenter in Leanback 1.1.0-rc02 does not expose direct spacing setters.
+            // We keep default paddings to preserve DPAD behavior and apply spacing through card sizes.
+        }
+
+        rowsAdapter = ArrayObjectAdapter(listRowPresenter)
         adapter = rowsAdapter
 
         cardPresenter = CardPresenter()
@@ -67,7 +91,7 @@ class HomeBrowseFragment : BrowseSupportFragment(),
     }
 
     private fun loadDynamicRows() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val repo = Repository()
             val categories = repo.getCategories()
 
@@ -121,40 +145,140 @@ class HomeBrowseFragment : BrowseSupportFragment(),
 
 private data class SimpleCard(val title: String, val subtitle: String)
 
+/**
+ * CardPresenter that applies:
+ * - Rounded corners
+ * - Focus scale and focus ring via background drawable
+ * - Bottom gradient overlay for text legibility
+ * - Title and subtitle styling aligned with Ocean/Figma
+ */
 class CardPresenter : Presenter() {
+
     override fun onCreateViewHolder(parent: android.view.ViewGroup): ViewHolder {
-        val cardView = ImageCardView(parent.context).apply {
+        val context = parent.context
+        val width = context.resources.getDimensionPixelSize(R.dimen.home_card_width)
+        val height = context.resources.getDimensionPixelSize(R.dimen.home_card_height)
+
+        // Root container so we can overlay gradient + labels on top of image
+        val container = FrameLayout(context).apply {
             isFocusable = true
             isFocusableInTouchMode = true
-            setBackgroundColor(Color.parseColor("#ffffff"))
-            setInfoAreaBackgroundColor(Color.parseColor("#2563EB"))
-            setMainImageDimensions(313, 176)
+            layoutParams = android.view.ViewGroup.LayoutParams(width, height)
+            background = context.getDrawable(R.drawable.bg_card_normal)
+            clipToOutline = true
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(
+                        0, 0, view.width, view.height,
+                        context.resources.getDimension(R.dimen.home_card_radius)
+                    )
+                }
+            }
         }
-        return ViewHolder(cardView)
+
+        val image = ImageView(context).apply {
+            id = View.generateViewId()
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            setImageDrawable(ColorDrawable(Color.DKGRAY))
+        }
+        container.addView(image)
+
+        val overlay = View(context).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            background = context.getDrawable(R.drawable.overlay_card_gradient)
+        }
+        container.addView(overlay)
+
+        // Labels at bottom
+        val title = TextView(context).apply {
+            id = View.generateViewId()
+            setTextAppearance(context, R.style.HomeCardTitleText)
+            setPadding(12, 0, 12, 8)
+            ellipsize = android.text.TextUtils.TruncateAt.END
+        }
+        val subtitle = TextView(context).apply {
+            id = View.generateViewId()
+            setTextAppearance(context, R.style.HomeCardSubtitleText)
+            setPadding(12, 0, 12, 12)
+            ellipsize = android.text.TextUtils.TruncateAt.END
+        }
+
+        // Position labels manually at bottom
+        val titleParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.BOTTOM
+            bottomMargin = 24
+        }
+        val subtitleParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.BOTTOM
+        }
+        container.addView(subtitle, subtitleParams)
+        container.addView(title, titleParams)
+
+        // Focus behavior: scale and background swap
+        container.setOnFocusChangeListener { v, hasFocus ->
+            val scale = if (hasFocus) 1.06f else 1.0f
+            v.animate().scaleX(scale).scaleY(scale)
+                .setDuration(160)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .start()
+            v.background = if (hasFocus)
+                v.context.getDrawable(R.drawable.bg_card_focused)
+            else
+                v.context.getDrawable(R.drawable.bg_card_normal)
+
+            ViewCompat.setElevation(
+                v,
+                if (hasFocus)
+                    v.context.resources.getDimension(R.dimen.home_card_elevation_focused)
+                else
+                    v.context.resources.getDimension(R.dimen.home_card_elevation_normal)
+            )
+        }
+
+        // Return a properly typed Presenter.ViewHolder
+        return CardViewHolder(container, image, title, subtitle)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        val cardView = viewHolder.view as ImageCardView
+        val holder = viewHolder as CardPresenter.CardViewHolder
         when (item) {
             is ContentItem -> {
-                cardView.titleText = item.title
-                cardView.contentText = item.durationSec?.let { "${it / 60} min" } ?: ""
-                cardView.badgeImage = null
-                cardView.mainImage = ColorDrawable(Color.LTGRAY)
-                Glide.with(cardView.context)
+                holder.title.text = item.title
+                holder.subtitle.text = item.durationSec?.let { "${it / 60} min" } ?: ""
+                Glide.with(holder.container.context)
                     .load(item.imageUrl)
                     .centerCrop()
-                    .into(cardView.mainImageView)
+                    .into(holder.image)
             }
             is SimpleCard -> {
-                cardView.titleText = item.title
-                cardView.contentText = item.subtitle
-                cardView.mainImage = ColorDrawable(Color.parseColor("#F59E0B"))
+                holder.title.text = item.title
+                holder.subtitle.text = item.subtitle
+                holder.image.setImageDrawable(ColorDrawable(Color.parseColor("#F59E0B")))
             }
         }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) = Unit
+
+    private class CardViewHolder(
+        val container: FrameLayout,
+        val image: ImageView,
+        val title: TextView,
+        val subtitle: TextView
+    ) : Presenter.ViewHolder(container)
 }
 
 class HomeViewModel : androidx.lifecycle.ViewModel()

@@ -9,6 +9,17 @@
     <color name="ocean_surface">#ffffff</color>
     <color name="ocean_text">#111827</color>
 
+    <!-- Additional tokens implied by Figma home page -->
+    <color name="home_header_text">#FFFFFF</color>
+    <color name="home_header_subtle">#7F8282</color>
+    <color name="home_row_divider">#2C2C2C</color>
+    <color name="home_card_title">#FFFFFF</color>
+    <color name="home_card_subtitle">#DADADA</color>
+    <color name="home_card_overlay_start">#000000</color>
+    <color name="home_card_overlay_end">#00000000</color>
+    <color name="home_focus_ring">@color/ocean_surface</color>
+    <color name="home_nav_bg">#28292F</color>
+
     <!-- Legacy fallbacks -->
     <color name="tv_background">@color/ocean_background</color>
     <color name="tv_overlay">#1A000000</color>

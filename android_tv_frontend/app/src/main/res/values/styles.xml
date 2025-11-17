@@ -11,13 +11,35 @@
 
         <!-- Leanback specific -->
         <item name="browseTitleViewStyle">@style/OceanBrowseTitle</item>
-        <!-- Set orb colors directly (attribute names without a dedicated style parent to avoid missing style) -->
+        <item name="rowHeaderStyle">@style/HomeRowHeader</item>
         <item name="searchOrbColor">@color/ocean_primary</item>
         <item name="searchOrbIconColor">@color/ocean_surface</item>
     </style>
 
     <style name="OceanBrowseTitle" parent="Widget.Leanback.TitleView">
         <item name="android:background">@color/ocean_background</item>
+    </style>
+
+    <!-- Row header text to match Figma 32px light white -->
+    <style name="HomeRowHeader">
+        <item name="android:textColor">@color/home_header_text</item>
+        <item name="android:textSize">@dimen/home_header_text_size</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingTop">@dimen/home_browse_header_top_padding</item>
+        <item name="android:paddingBottom">@dimen/home_browse_header_bottom_padding</item>
+    </style>
+
+    <!-- Card text styles -->
+    <style name="HomeCardTitleText">
+        <item name="android:textColor">@color/home_card_title</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="HomeCardSubtitleText">
+        <item name="android:textColor">@color/home_card_subtitle</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="CardStyle">
