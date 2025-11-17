@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,6 +26,7 @@ import com.example.android_tv_frontend.ui.home.HomeScreen
 import com.example.android_tv_frontend.ui.live.LiveTvGuideScreen
 import com.example.android_tv_frontend.ui.player.PlayerScreen
 import com.example.android_tv_frontend.ui.search.SearchScreen
+import com.example.android_tv_frontend.ui.settings.SettingsScreen
 
 /**
  * PUBLIC_INTERFACE
@@ -45,6 +45,7 @@ object Routes {
     const val Detail = "detail/{id}"
     const val Player = "player/{id}"
     const val Search = "search"
+    const val Settings = "settings"
 }
 
 /**
@@ -60,17 +61,19 @@ private fun TVScaffold(navController: NavHostController) {
         val focusRequester = FocusRequester()
         Column(
             modifier = Modifier
-                .width(220.dp)
+                .width(240.dp)
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(16.dp)
+                .padding(20.dp)
                 .focusRequester(focusRequester),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.Start
         ) {
             NavButton("Home") { navController.navigate(Routes.Home) }
             NavButton("Live TV") { navController.navigate(Routes.Live) }
+            NavButton("On-Demand") { navController.navigate(Routes.Home) }
             NavButton("Search") { navController.navigate(Routes.Search) }
+            NavButton("Settings") { navController.navigate(Routes.Settings) }
         }
 
         Box(
@@ -98,6 +101,9 @@ private fun TVScaffold(navController: NavHostController) {
                         onOpenDetail = { id -> navController.navigate("detail/$id") }
                     )
                 }
+                composable(Routes.Settings) {
+                    SettingsScreen()
+                }
                 composable(Routes.Detail) { backStack ->
                     val id = backStack.arguments?.getString("id").orEmpty()
                     VideoDetailScreen(
@@ -120,6 +126,7 @@ private fun TVScaffold(navController: NavHostController) {
 
 @Composable
 private fun NavButton(text: String, onClick: () -> Unit) {
+    // TV Material3 button automatically supports focus states with glow and scale
     androidx.tv.material3.Button(onClick = onClick) {
         Text(text = text, style = MaterialTheme.typography.titleMedium)
     }
