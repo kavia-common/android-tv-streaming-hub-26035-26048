@@ -1,43 +1,32 @@
 package com.example.android_tv_frontend
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import android.view.KeyEvent
-import android.widget.TextView
+import androidx.fragment.app.commit
+import com.example.android_tv_frontend.ui.home.HomeBrowseFragment
 
 /**
- * Main Activity for Android TV
- * Extends FragmentActivity for Leanback compatibility
+ * PUBLIC_INTERFACE
+ * Main Activity for Android TV.
+ * Hosts the HomeBrowseFragment which renders the Leanback BrowseSupportFragment home.
  */
 class MainActivity : FragmentActivity() {
 
-    private lateinit var titleText: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        
-        titleText = findViewById(R.id.title_text)
-        titleText.text = "android_tv_frontend"
-        
-        // TODO: Initialize your rating screen components here
-        // setupRatingOverlay()
-    }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        // Handle TV remote control inputs
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER,
-            KeyEvent.KEYCODE_ENTER -> {
-                // Handle SELECT/OK button
-                true
+        // Host fragment container programmatically to keep it lean
+        val container = androidx.fragment.app.FragmentContainerView(this).apply {
+            id = R.id.main_container
+            setBackgroundColor(Color.parseColor("#f9fafb"))
+        }
+        setContentView(container)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                replace(R.id.main_container, HomeBrowseFragment.newInstance())
             }
-            KeyEvent.KEYCODE_BACK -> {
-                // Handle BACK button
-                finish()
-                true
-            }
-            else -> super.onKeyDown(keyCode, event)
         }
     }
 }
