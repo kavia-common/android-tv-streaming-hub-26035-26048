@@ -7,7 +7,8 @@ import androidx.fragment.app.FragmentActivity
 import com.example.android_tv_frontend.data.model.ContentItem
 
 /**
- * Hosts the ContentDetailsFragment.
+ * PUBLIC_INTERFACE
+ * Hosts the ContentDetailsFragment which renders the Figma-aligned Content Info UI.
  */
 class DetailsActivity : FragmentActivity() {
 

@@ -17,4 +17,10 @@
     <!-- Header typography approximations -->
     <dimen name="home_header_text_size">32sp</dimen>
     <dimen name="home_header_letter_spacing">0sp</dimen>
+
+    <!-- Details screen approximations based on Figma -->
+    <dimen name="details_title_text_size">28sp</dimen>
+    <dimen name="details_subtitle_text_size">18sp</dimen>
+    <dimen name="details_body_text_size">16sp</dimen>
+    <dimen name="details_surface_radius">12dp</dimen>
 </resources>

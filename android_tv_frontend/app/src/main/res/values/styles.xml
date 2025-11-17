@@ -42,6 +42,25 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <!-- Details text styles approximating Figma -->
+    <style name="DetailsTitleText">
+        <item name="android:textColor">@color/ocean_text</item>
+        <item name="android:textSize">@dimen/details_title_text_size</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="DetailsSubtitleText">
+        <item name="android:textColor">@color/tv_secondary</item>
+        <item name="android:textSize">@dimen/details_subtitle_text_size</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="DetailsBodyText">
+        <item name="android:textColor">@color/ocean_text</item>
+        <item name="android:textSize">@dimen/details_body_text_size</item>
+        <item name="android:maxLines">5</item>
+    </style>
+
     <style name="CardStyle">
         <item name="android:foregroundGravity">center</item>
     </style>

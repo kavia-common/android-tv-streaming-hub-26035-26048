@@ -20,6 +20,10 @@
     <color name="home_focus_ring">@color/ocean_surface</color>
     <color name="home_nav_bg">#28292F</color>
 
+    <!-- Details tokens -->
+    <color name="details_backdrop_overlay_start">#00000000</color>
+    <color name="details_backdrop_overlay_end">#99000000</color>
+
     <!-- Legacy fallbacks -->
     <color name="tv_background">@color/ocean_background</color>
     <color name="tv_overlay">#1A000000</color>
